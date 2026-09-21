@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 90" width="600" height="90">
+  <defs>
+    <linearGradient id="titleBg" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#111;stop-opacity:0"/>
+      <stop offset="20%" style="stop-color:#111;stop-opacity:1"/>
+      <stop offset="80%" style="stop-color:#111;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#111;stop-opacity:0"/>
+    </linearGradient>
+    <linearGradient id="goldLine" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#b8860b;stop-opacity:0"/>
+      <stop offset="20%" style="stop-color:#ffd700;stop-opacity:1"/>
+      <stop offset="80%" style="stop-color:#ffd700;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#b8860b;stop-opacity:0"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <!-- Fondo del título -->
+  <rect x="0" y="15" width="600" height="60" fill="url(#titleBg)" rx="8"/>
+  <!-- Líneas doradas decorativas -->
+  <rect x="0" y="15" width="600" height="3" fill="url(#goldLine)"/>
+  <rect x="0" y="72" width="600" height="3" fill="url(#goldLine)"/>
+  <!-- Texto placeholder — reemplazado dinámicamente por JS -->
+  <text id="cat-title-text"
+    x="300" y="56"
+    text-anchor="middle"
+    font-family="'Georgia', 'Times New Roman', serif"
+    font-size="32"
+    font-weight="900"
+    letter-spacing="4"
+    fill="#ffd700"
+    stroke="#000"
+    stroke-width="1.5"
+    paint-order="stroke"
+    filter="url(#glow)"
+  >CATEGORÍA</text>
+</svg>

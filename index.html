@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mundo Tunes — Menú Digital</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@400;600;900&family=Lato:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── Tokens ─────────────────────────────────────────── */
+    :root {
+      --gold:        #ffd700;
+      --gold-dark:   #b8860b;
+      --gold-light:  #fff8a0;
+      --orange:      #f4890a;
+      --magenta:     #d81b8c;
+      --magenta2:    #e91e8c;
+      --purple:      #6b1aaa;
+      --blue-cobalt: #1a2bcc;   /* azul cobalto del diseño */
+      --blue-dark:   #0d1057;   /* azul oscuro de las cards */
+      --blue-deep:   #080830;   /* fondo más profundo */
+      --bg:          #0e1580;   /* azul cobalto base */
+      --bg-section:  #0a0e52;   /* fondo de banda de sección */
+      --bg-card:     #0d1057;   /* card oscura azul */
+      --text:        #f0f4ff;
+      --text-muted:  #8aadde;
+      --white:       #ffffff;
+      --shadow:      0 8px 32px rgba(0,0,0,0.7);
+      --radius-card: 14px;
+      --radius-sm:   8px;
+      --spacing-xs:  4px;
+      --spacing-sm:  8px;
+      --spacing-md:  16px;
+      --spacing-lg:  24px;
+      --spacing-xl:  48px;
+    }
+
+    /* ─── Reset & Base ───────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    /* Fondo azul cielo Looney Tunes + gradiente púrpura abajo */
+    body {
+      background-color: #2a90d0;
+      background-image:
+        /* Estrellas */
+        radial-gradient(1.5px 1.5px at 12%  8%,  rgba(255,255,255,0.9) 0%, transparent 100%),
+        radial-gradient(1px   1px   at 28%  15%, rgba(255,220,100,0.8) 0%, transparent 100%),
+        radial-gradient(2px   2px   at 45%  5%,  rgba(255,255,255,0.7) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 62%  12%, rgba(255,220,100,0.9) 0%, transparent 100%),
+        radial-gradient(1px   1px   at 78%  7%,  rgba(255,255,255,0.6) 0%, transparent 100%),
+        radial-gradient(2px   2px   at 88%  18%, rgba(255,220,100,0.7) 0%, transparent 100%),
+        radial-gradient(1px   1px   at 5%   35%, rgba(255,255,255,0.5) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 95%  42%, rgba(255,255,255,0.6) 0%, transparent 100%),
+        radial-gradient(1px   1px   at 20%  55%, rgba(255,220,100,0.5) 0%, transparent 100%),
+        radial-gradient(2px   2px   at 75%  60%, rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(1px   1px   at 38%  75%, rgba(255,220,100,0.6) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 55%  82%, rgba(255,255,255,0.5) 0%, transparent 100%),
+        radial-gradient(1px   1px   at 8%   90%, rgba(255,220,100,0.4) 0%, transparent 100%),
+        radial-gradient(2px   2px   at 92%  88%, rgba(255,255,255,0.5) 0%, transparent 100%),
+        /* Azul cielo arriba → azul cobalto centro → púrpura abajo */
+        linear-gradient(180deg,
+          #42b8f0 0%,
+          #2a90d0 20%,
+          #1a6ab8 45%,
+          #0e1580 68%,
+          #2a0a6b 84%,
+          #5a0a7a 100%);
+      color: var(--text);
+      font-family: 'Lato', sans-serif;
+      min-height: 100vh;
+    }
+
+    /* Banda de sección — translúcida para ver el fondo */
+    .category {
+      background: rgba(8, 14, 70, 0.45);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      margin-bottom: 64px;
+      padding: 0 32px 48px;
+      border-radius: 28px;
+    }
+
+    /* El divider toca el borde superior de la sección */
+    .category > .divider:first-child {
+      margin-top: 0;
+      margin-bottom: var(--spacing-lg);
+      padding-top: 20px;
+    }
+    /* ─── Nubes flotantes ────────────────────────────────── */
+    .clouds-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .cloud {
+      position: absolute;
+      opacity: 0.55;
+      animation: cloud-drift linear infinite;
+      will-change: transform;
+    }
+
+    /* Cada nube tiene tamaño, posición vertical y duración distintos */
+    .cloud-1  { width: 180px; top:  4%;  animation-duration: 60s;  animation-delay:   0s; }
+    .cloud-2  { width: 120px; top: 12%;  animation-duration: 80s;  animation-delay: -20s; }
+    .cloud-3  { width: 220px; top: 22%;  animation-duration: 70s;  animation-delay: -35s; }
+    .cloud-4  { width: 100px; top:  8%;  animation-duration: 90s;  animation-delay: -10s; }
+    .cloud-5  { width: 160px; top: 35%;  animation-duration: 75s;  animation-delay: -50s; }
+    .cloud-6  { width: 200px; top: 48%;  animation-duration: 85s;  animation-delay: -15s; }
+    .cloud-7  { width: 130px; top: 60%;  animation-duration: 65s;  animation-delay: -40s; }
+    .cloud-8  { width: 170px; top: 72%;  animation-duration: 95s;  animation-delay: -25s; }
+    .cloud-9  { width: 110px; top: 82%;  animation-duration: 72s;  animation-delay:  -5s; }
+    .cloud-10 { width: 240px; top: 90%;  animation-duration: 100s; animation-delay: -60s; }
+
+    @keyframes cloud-drift {
+      from { transform: translateX(-300px); }
+      to   { transform: translateX(calc(100vw + 300px)); }
+    }
+
+    /* El contenido va encima de las nubes */
+    header, nav.category-nav, main, .cta-banner, footer {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ─── Header ─────────────────────────────────────────── */
+    header {
+      position: relative;
+      text-align: center;
+      padding: var(--spacing-xl) var(--spacing-md) var(--spacing-lg);
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(26,43,204,0.5) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .logo-wrap {
+      display: inline-block;
+      position: relative;
+      max-width: 480px;
+      width: 90%;
+    }
+
+    .logo-wrap svg {
+      width: 100%;
+      height: auto;
+      filter: drop-shadow(0 4px 24px rgba(255,215,0,0.35));
+    }
+
+    .tagline {
+      margin-top: var(--spacing-md);
+      font-family: 'Lato', sans-serif;
+      font-size: clamp(0.72rem, 2vw, 0.88rem);
+      letter-spacing: 5px;
+      color: #c8d8f8;
+      text-transform: uppercase;
+    }
+
+    /* ─── Nav de categorías ──────────────────────────────── */
+    nav.category-nav {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: var(--spacing-sm);
+      padding: 12px var(--spacing-md);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #070a30;
+      border-bottom: 2px solid rgba(255,215,0,0.25);
+      box-shadow: 0 2px 20px rgba(0,0,0,0.6);
+    }
+
+    nav.category-nav a {
+      font-family: 'Lato', sans-serif;
+      font-size: clamp(0.65rem, 1.8vw, 0.78rem);
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: #c8d8f8;
+      padding: 7px 16px;
+      border: 1.5px solid rgba(255,215,0,0.3);
+      border-radius: 99px;
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    nav.category-nav a:hover,
+    nav.category-nav a:focus {
+      color: #070a30;
+      border-color: var(--gold);
+      background: var(--gold);
+      outline: none;
+    }
+
+    /* ─── Main container ─────────────────────────────────── */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 var(--spacing-md) var(--spacing-xl);
+    }
+
+    /* ─── Divider SVG ────────────────────────────────────── */
+    .divider {
+      display: flex;
+      justify-content: center;
+      margin: var(--spacing-xl) 0 var(--spacing-lg);
+    }
+
+    .divider svg {
+      width: min(400px, 90%);
+      height: auto;
+    }
+
+    /* ─── Category section ───────────────────────────────── */
+    /* (estilos base definidos arriba) */
+
+    /* ─── Category title SVG ─────────────────────────────── */
+    .cat-title-wrap {
+      display: flex;
+      justify-content: center;
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .cat-title-wrap svg {
+      width: min(560px, 95%);
+      height: auto;
+      filter: drop-shadow(0 2px 12px rgba(255,215,0,0.2));
+    }
+
+    /* ─── Grid de cards ──────────────────────────────────── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
+      gap: var(--spacing-lg);
+    }
+
+    /* ─── Card ───────────────────────────────────────────── */
+    .card {
+      position: relative;
+      border-radius: var(--radius-card);
+      background: rgba(8, 16, 75, 0.72);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1.5px solid rgba(255, 185, 0, 0.6);
+      padding: var(--spacing-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-sm);
+      box-shadow:
+        0 4px 24px rgba(0,0,0,0.35),
+        inset 0 1px 0 rgba(255,255,255,0.08);
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+      overflow: visible;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius-card);
+      background: linear-gradient(135deg,
+        rgba(255,255,255,0.06) 0%,
+        transparent 60%);
+      pointer-events: none;
+    }
+
+    .card:hover,
+    .card:focus-within {
+      transform: translateY(-4px);
+      border-color: var(--gold);
+      box-shadow:
+        0 12px 40px rgba(255,215,0,0.25),
+        0 0 0 1px rgba(216,27,140,0.25),
+        inset 0 1px 0 rgba(255,255,255,0.1);
+    }
+
+    .card-name {
+      font-family: 'Lato', sans-serif;
+      font-size: clamp(0.88rem, 2.5vw, 1rem);
+      font-weight: 900;
+      color: var(--gold);
+      line-height: 1.3;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .card-desc {
+      font-size: clamp(0.78rem, 2vw, 0.86rem);
+      color: #d8eaff;
+      line-height: 1.6;
+      flex: 1;
+    }
+
+    .card-prices {
+      display: flex;
+      gap: var(--spacing-sm);
+      margin-top: var(--spacing-xs);
+      flex-wrap: wrap;
+    }
+
+    .price-badge {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: rgba(5, 10, 55, 0.6);
+      border: 1.5px solid rgba(255,185,0,0.55);
+      border-radius: var(--radius-sm);
+      padding: 6px 14px;
+      min-width: 90px;
+    }
+
+    .price-label {
+      font-family: 'Lato', sans-serif;
+      font-size: 0.58rem;
+      letter-spacing: 2px;
+      color: #aaccee;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+
+    .price-value {
+      font-family: 'Lato', sans-serif;
+      font-size: clamp(1rem, 2.5vw, 1.1rem);
+      font-weight: 900;
+      color: var(--gold);
+    }
+
+    .price-single {
+      font-family: 'Lato', sans-serif;
+      font-size: clamp(1.2rem, 3vw, 1.4rem);
+      font-weight: 900;
+      color: var(--gold);
+      margin-top: var(--spacing-xs);
+    }
+
+    /* ─── Inline SVG ornamentos de card ──────────────────── */
+    .card-top-line {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg,
+        transparent,
+        var(--magenta) 20%,
+        var(--gold) 50%,
+        var(--orange) 80%,
+        transparent);
+      border-radius: var(--radius-card) var(--radius-card) 0 0;
+    }
+
+    /* ─── Footer ─────────────────────────────────────────── */
+    footer {
+      text-align: center;
+      padding: var(--spacing-xl) var(--spacing-md) var(--spacing-lg);
+      background: #07092a;
+      border-top: 1px solid rgba(255,215,0,0.15);
+    }
+
+    .footer-brand {
+      font-family: 'Lato', sans-serif;
+      font-size: clamp(0.8rem, 2.5vw, 0.95rem);
+      font-weight: 900;
+      color: var(--gold);
+      margin-bottom: 4px;
+      letter-spacing: 1px;
+    }
+
+    .footer-sub {
+      font-size: 0.72rem;
+      color: #8aadde;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    /* ─── CTA Banner sobre el footer ─────────────────────── */
+    .cta-banner {
+      background: linear-gradient(135deg, #c0186a 0%, #8b1aaa 50%, #5a0a8a 100%);
+      padding: var(--spacing-xl) var(--spacing-md);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-banner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(1.5px 1.5px at 10% 20%, rgba(255,255,255,0.8) 0%, transparent 100%),
+        radial-gradient(1px   1px   at 30% 70%, rgba(255,215,0,0.9)   0%, transparent 100%),
+        radial-gradient(2px   2px   at 60% 15%, rgba(255,255,255,0.6) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 80% 80%, rgba(255,215,0,0.7)   0%, transparent 100%),
+        radial-gradient(1px   1px   at 90% 40%, rgba(255,255,255,0.5) 0%, transparent 100%);
+      pointer-events: none;
+    }
+
+    .cta-question {
+      font-family: 'Lato', sans-serif;
+      font-size: clamp(1.3rem, 4vw, 2rem);
+      font-weight: 900;
+      color: #fff;
+      margin-bottom: var(--spacing-lg);
+      position: relative;
+    }
+
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #25d366;
+      color: #fff;
+      font-family: 'Lato', sans-serif;
+      font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 14px 32px;
+      border-radius: 99px;
+      box-shadow: 0 4px 20px rgba(37,211,102,0.5);
+      transition: transform 0.2s, box-shadow 0.2s;
+      position: relative;
+    }
+
+    .cta-btn:hover,
+    .cta-btn:focus {
+      transform: scale(1.05);
+      box-shadow: 0 6px 28px rgba(37,211,102,0.7);
+      outline: none;
+    }
+
+    .cta-btn svg { width: 24px; height: 24px; flex-shrink: 0; }
+
+    /* ─── WhatsApp FAB ───────────────────────────────────── */
+    .wa-fab {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 200;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: #25d366;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 20px rgba(37,211,102,0.45);
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .wa-fab:hover,
+    .wa-fab:focus {
+      transform: scale(1.1);
+      box-shadow: 0 6px 28px rgba(37,211,102,0.6);
+      outline: none;
+    }
+
+    .wa-fab svg { width: 32px; height: 32px; }
+
+    /* ─── Responsive ─────────────────────────────────────── */
+
+    /* Tablet (≤ 768px) */
+    @media (max-width: 768px) {
+      .category {
+        padding: 0 16px 32px;
+        margin-bottom: 40px;
+        border-radius: 20px;
+      }
+
+      header {
+        padding: var(--spacing-lg) var(--spacing-md) var(--spacing-md);
+      }
+
+      .logo-wrap {
+        max-width: 340px;
+      }
+
+      nav.category-nav {
+        gap: 6px;
+        padding: 10px var(--spacing-sm);
+      }
+
+      nav.category-nav a {
+        font-size: 0.62rem;
+        padding: 5px 10px;
+        letter-spacing: 1px;
+      }
+
+      .cards-grid {
+        grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr));
+        gap: var(--spacing-md);
+      }
+
+      .divider {
+        margin: var(--spacing-lg) 0 var(--spacing-md);
+      }
+
+      .category {
+        margin-bottom: var(--spacing-lg);
+      }
+    }
+
+    /* Móvil grande (≤ 600px) */
+    @media (max-width: 600px) {
+      .cards-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .card {
+        padding: var(--spacing-md);
+      }
+
+      .card-prices {
+        gap: var(--spacing-sm);
+      }
+
+      .price-badge {
+        min-width: 0;
+        flex: 1;
+      }
+
+      /* Botón WA más pequeño para no tapar precios */
+      .wa-fab {
+        width: 50px;
+        height: 50px;
+        bottom: 16px;
+        right: 16px;
+      }
+
+      .wa-fab svg {
+        width: 26px;
+        height: 26px;
+      }
+
+      /* Padding extra al final para que el FAB no tape el footer */
+      footer {
+        padding-bottom: 80px;
+      }
+    }
+
+    /* Móvil pequeño (≤ 400px) */
+    @media (max-width: 400px) {
+      .logo-wrap {
+        max-width: 95%;
+      }
+
+      nav.category-nav a {
+        font-size: 0.58rem;
+        padding: 4px 8px;
+      }
+
+      .card-name {
+        font-size: 0.88rem;
+      }
+
+      .price-value {
+        font-size: 1rem;
+      }
+
+      .price-single {
+        font-size: 1.1rem;
+      }
+    }
+
+    /* Touch: quitar hover en dispositivos táctiles */
+    @media (hover: none) {
+      .card:hover {
+        transform: none;
+        border-color: rgba(255,215,0,0.35);
+        box-shadow: var(--shadow);
+      }
+    }
+
+    /* ─── Personaje dentro/encima de la card ────────────── */
+    .card-char {
+      position: absolute;
+      bottom: auto;
+      top: -45px;        /* sale ligeramente por arriba de la card */
+      right: 10px;
+      width: 90px;
+      pointer-events: none;
+      filter: drop-shadow(0 4px 10px rgba(0,0,0,0.55));
+      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+      z-index: 2;
+    }
+
+    .card:hover .card-char,
+    .card:focus-within .card-char {
+      transform: translateY(-10px) scale(1.12) rotate(3deg);
+    }
+
+    /* Padding top para dejar espacio al personaje que sobresale */
+    .card.has-char {
+      padding-top: var(--spacing-lg);
+      padding-right: var(--spacing-lg);
+      margin-top: 55px;
+    }
+
+    /* Cards donde el personaje va abajo */
+    .card.has-char.char-bottom {
+      margin-top: 0;
+      padding-top: var(--spacing-lg);
+      padding-bottom: 110px;
+    }
+
+    /* El grid necesita padding top para que el primer personaje no se corte */
+    .cards-grid {
+      padding-top: 16px;
+    }
+
+    /* Card de Pato Chiflado: sin margin-top en desktop para alinear con char-bottom */
+    .card.card-pato-chiflado {
+      margin-top: 0;
+    }
+
+    /* Mobile: todos los personajes van arriba a la derecha, nunca tapan texto */
+    @media (max-width: 600px) {
+
+      /* Todos los personajes: centrados verticalmente, pegados a la derecha */
+      .card-char {
+        width: 100px !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+        right: -5px !important;
+        bottom: auto !important;
+      }
+
+      /* has-char y char-bottom: sin margin-top extra, sin padding-bottom */
+      .card.has-char,
+      .card.has-char.char-bottom {
+        margin-top: 0 !important;
+        padding-bottom: var(--spacing-lg) !important;
+        padding-right: 110px !important;
+      }
+
+      /* Porkyburguer: más espacio de texto en mobile */
+      .card.card-porkyburguer {
+        padding-right: 20px !important;
+      }
+
+      .card.card-porkyburguer .card-char {
+        width: 85px !important;
+        top: -40px !important;
+        transform: none !important;
+      }
+    }
+    .char-section-wrap {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: var(--spacing-lg);
+      margin-bottom: var(--spacing-md);
+      flex-wrap: wrap;
+    }
+
+    .char-figure {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+
+    .char-figure svg {
+      filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5));
+      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    }
+
+    .char-figure:hover svg,
+    .char-figure:focus svg {
+      transform: translateY(-8px) scale(1.08);
+    }
+
+    .char-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    /* En móvil ocultar personajes secundarios para no saturar */
+    @media (max-width: 480px) {
+      .char-figure.secondary { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════ NUBES FLOTANTES ══════════ -->
+  <div class="clouds-layer" aria-hidden="true">
+    <img class="cloud cloud-1"  src="assets/svg/cloud.svg" alt="" style="left:-200px">
+    <img class="cloud cloud-2"  src="assets/svg/cloud.svg" alt="" style="left:10%">
+    <img class="cloud cloud-3"  src="assets/svg/cloud.svg" alt="" style="left:35%">
+    <img class="cloud cloud-4"  src="assets/svg/cloud.svg" alt="" style="left:60%">
+    <img class="cloud cloud-5"  src="assets/svg/cloud.svg" alt="" style="left:80%">
+    <img class="cloud cloud-6"  src="assets/svg/cloud.svg" alt="" style="left:5%">
+    <img class="cloud cloud-7"  src="assets/svg/cloud.svg" alt="" style="left:45%">
+    <img class="cloud cloud-8"  src="assets/svg/cloud.svg" alt="" style="left:70%">
+    <img class="cloud cloud-9"  src="assets/svg/cloud.svg" alt="" style="left:25%">
+    <img class="cloud cloud-10" src="assets/svg/cloud.svg" alt="" style="left:55%">
+  </div>
+
+  <!-- ══════════ HEADER ══════════ -->
+  <header>
+    <div class="logo-wrap" aria-label="Comidas Rápidas Mundo Tunes">
+      <!-- Logo SVG inline -->
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 160" role="img" aria-labelledby="logo-title">
+        <title id="logo-title">Comidas Rápidas Mundo Tunes</title>
+        <defs>
+          <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#d81b8c"/>
+            <stop offset="35%" style="stop-color:#f4a300"/>
+            <stop offset="65%" style="stop-color:#d81b8c"/>
+            <stop offset="100%" style="stop-color:#c1121f"/>
+          </linearGradient>
+          <linearGradient id="borderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#ffd700"/>
+            <stop offset="50%" style="stop-color:#fff8a0"/>
+            <stop offset="100%" style="stop-color:#b8860b"/>
+          </linearGradient>
+          <filter id="logoShadow">
+            <feDropShadow dx="2" dy="3" stdDeviation="3" flood-color="#000" flood-opacity="0.6"/>
+          </filter>
+        </defs>
+        <rect x="4" y="4" width="412" height="152" rx="18" fill="url(#bgGrad)"/>
+        <rect x="2" y="2" width="416" height="156" rx="20" fill="none" stroke="url(#borderGrad)" stroke-width="4"/>
+        <rect x="8" y="8" width="404" height="144" rx="14" fill="none" stroke="#111" stroke-width="2.5"/>
+        <text x="18" y="42" font-size="22" fill="#ffd700" opacity="0.85">★</text>
+        <text x="385" y="42" font-size="22" fill="#ffd700" opacity="0.85">★</text>
+        <text x="18" y="130" font-size="18" fill="#ffd700" opacity="0.7">✦</text>
+        <text x="388" y="130" font-size="18" fill="#ffd700" opacity="0.7">✦</text>
+        <text x="210" y="72" text-anchor="middle"
+              font-family="Georgia, serif" font-size="34" font-weight="900"
+              letter-spacing="3" fill="white" stroke="#111" stroke-width="2.5"
+              paint-order="stroke" filter="url(#logoShadow)">COMIDAS RAPIDAS</text>
+        <line x1="60" y1="86" x2="360" y2="86" stroke="#ffd700" stroke-width="1.5" opacity="0.7"/>
+        <circle cx="210" cy="86" r="4" fill="#ffd700"/>
+        <circle cx="180" cy="86" r="2.5" fill="#ffd700" opacity="0.6"/>
+        <circle cx="240" cy="86" r="2.5" fill="#ffd700" opacity="0.6"/>
+        <text x="210" y="128" text-anchor="middle"
+              font-family="Georgia, serif" font-size="38" font-weight="900"
+              letter-spacing="5" fill="#ffd700" stroke="#111" stroke-width="2.5"
+              paint-order="stroke" filter="url(#logoShadow)">MUNDO TUNES</text>
+      </svg>
+    </div>
+    <p class="tagline">El sabor de tu caricatura favorita</p>
+  </header>
+
+  <!-- ══════════ NAV ══════════ -->
+  <nav class="category-nav" aria-label="Categorías del menú">
+    <a href="#salchipapas">Salchipapas</a>
+    <a href="#hamburguesas">Torti-Hamburguesa</a>
+    <a href="#perrisimo">Torti-Perrísimo</a>
+    <a href="#mazorcadas">Mazorcadas</a>
+    <a href="#pinchos">Bony Pinchos</a>
+  </nav>
+
+  <!-- ══════════ MENÚ ══════════ -->
+  <main>
+
+    <!-- ─── SALCHIPAPAS ─── -->
+    <section class="category" id="salchipapas" aria-labelledby="title-salchipapas">
+      <div class="divider" aria-hidden="true">
+        <svg viewBox="0 0 400 30" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="divGrad1" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#d81b8c;stop-opacity:0"/>
+              <stop offset="15%" style="stop-color:#d81b8c"/>
+              <stop offset="50%" style="stop-color:#ffd700"/>
+              <stop offset="85%" style="stop-color:#d81b8c"/>
+              <stop offset="100%" style="stop-color:#d81b8c;stop-opacity:0"/>
+            </linearGradient>
+          </defs>
+          <rect x="0" y="13" width="400" height="2" fill="url(#divGrad1)" rx="1"/>
+          <text x="196" y="22" font-size="16" fill="#ffd700" text-anchor="middle">★</text>
+          <text x="170" y="20" font-size="10" fill="#ffd700" opacity="0.6" text-anchor="middle">✦</text>
+          <text x="222" y="20" font-size="10" fill="#ffd700" opacity="0.6" text-anchor="middle">✦</text>
+        </svg>
+      </div>
+
+      <div class="cat-title-wrap">
+        <svg viewBox="0 0 560 80" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-salchipapas">
+          <title id="title-salchipapas">Salchipapas</title>
+          <defs>
+            <linearGradient id="titleBg1" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#111;stop-opacity:0"/>
+              <stop offset="20%" style="stop-color:#111"/>
+              <stop offset="80%" style="stop-color:#111"/>
+              <stop offset="100%" style="stop-color:#111;stop-opacity:0"/>
+            </linearGradient>
+            <linearGradient id="goldLine1" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#b8860b;stop-opacity:0"/>
+              <stop offset="20%" style="stop-color:#ffd700"/>
+              <stop offset="80%" style="stop-color:#ffd700"/>
+              <stop offset="100%" style="stop-color:#b8860b;stop-opacity:0"/>
+            </linearGradient>
+            <filter id="glow1">
+              <feGaussianBlur stdDeviation="2" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+          <rect x="0" y="8" width="560" height="56" fill="url(#titleBg1)" rx="8"/>
+          <rect x="0" y="8" width="560" height="2.5" fill="url(#goldLine1)"/>
+          <rect x="0" y="61" width="560" height="2.5" fill="url(#goldLine1)"/>
+          <text x="280" y="48" text-anchor="middle"
+                font-family="Georgia, serif" font-size="30" font-weight="900"
+                letter-spacing="6" fill="#ffd700" stroke="#000" stroke-width="1.5"
+                paint-order="stroke" filter="url(#glow1)">SALCHIPAPAS</text>
+        </svg>
+      </div>
+
+      <div class="cards-grid">
+
+        <article class="card has-char char-bottom">
+          <div class="card-top-line" aria-hidden="true"></div>
+          <h3 class="card-name">★ La Piolín</h3>
+          <p class="card-desc">Papa francesa 200 gr, Salchichica americana Zenú, Queso fundido, Huevos de codorniz.</p>
+          <p class="price-single">$10.600</p>
+          <img src="assets/svg/chars/tweety.svg" alt="" class="card-char" aria-hidden="true" style="top:auto; bottom:0; right:6px; width:95px;"/>
+        </article>
+
+        <article class="card has-char char-bottom">
+          <div class="card-top-line" aria-hidden="true"></div>
+          <h3 class="card-name">★ La Cazadora de Elmer Gruñón</h3>
+          <p class="card-desc">Papa francesa 200 gr, Salchichica americana Zenú, Pollo desmechado y Carne desmechada, Chorizo mexicano, Queso fundido, Jamón ahumado, Huevos de codorniz, Vegetales frescos, Papas chips y Salsa de la casa.</p>
+          <p class="price-single">$23.200</p>
+          <img src="assets/svg/chars/elmer.svg" alt="" class="card-char" aria-hidden="true" style="top:auto; bottom:0; right:4px; width:100px;"/>
+        </article>
+
+        <article class="card has-char char-bottom">
+          <div class="card-top-line" aria-hidden="true"></div>
+          <h3 class="card-name">★ El Gran Banquete de Porky</h3>
+          <p class="card-desc">2 Porciones de papa 200 gr, Salchichica americana Zenú, Pollo desmechado y Carne desmechada, Chorizo mexicano, Tocineta ahumada, Maíz tiernito, Queso fundido, Jamón ahumado, Huevos de codorniz, Vegetales frescos, Papas chips y Salsa de la casa.</p>
+          <p class="price-single">$27.000</p>
+          <img src="assets/svg/chars/porky.svg" alt="" class="card-char" aria-hidden="true" style="top:auto; bottom:0; right:6px; width:70px;"/>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ─── TORTI-HAMBURGUESA ─── -->
+    <section class="category" id="hamburguesas" aria-labelledby="title-hamburguesas">
+      <div class="divider" aria-hidden="true">
+        <svg viewBox="0 0 400 30" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="divGrad2" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#d81b8c;stop-opacity:0"/>
+              <stop offset="15%" style="stop-color:#d81b8c"/>
+              <stop offset="50%" style="stop-color:#ffd700"/>
+              <stop offset="85%" style="stop-color:#d81b8c"/>
+              <stop offset="100%" style="stop-color:#d81b8c;stop-opacity:0"/>
+            </linearGradient>
+          </defs>
+          <rect x="0" y="13" width="400" height="2" fill="url(#divGrad2)" rx="1"/>
+          <text x="196" y="22" font-size="16" fill="#ffd700" text-anchor="middle">★</text>
+          <text x="170" y="20" font-size="10" fill="#ffd700" opacity="0.6" text-anchor="middle">✦</text>
+          <text x="222" y="20" font-size="10" fill="#ffd700" opacity="0.6" text-anchor="middle">✦</text>
+        </svg>
+      </div>
+
+      <div class="cat-title-wrap">
+        <svg viewBox="0 0 560 80" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-hamburguesas">
+          <title id="title-hamburguesas">Torti-Hamburguesa</title>
+          <defs>
+            <linearGradient id="titleBg2" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#111;stop-opacity:0"/>
+              <stop offset="20%" style="stop-color:#111"/>
+              <stop offset="80%" style="stop-color:#111"/>
+              <stop offset="100%" style="stop-color:#111;stop-opacity:0"/>
+            </linearGradient>
+            <linearGradient id="goldLine2" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#b8860b;stop-opacity:0"/>
+              <stop offset="20%" style="stop-color:#ffd700"/>
+              <stop offset="80%" style="stop-color:#ffd700"/>
+              <stop offset="100%" style="stop-color:#b8860b;stop-opacity:0"/>
+            </linearGradient>
+            <filter id="glow2">
+              <feGaussianBlur stdDeviation="2" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+          <rect x="0" y="8" width="560" height="56" fill="url(#titleBg2)" rx="8"/>
+          <rect x="0" y="8" width="560" height="2.5" fill="url(#goldLine2)"/>
+          <rect x="0" y="61" width="560" height="2.5" fill="url(#goldLine2)"/>
+          <text x="280" y="48" text-anchor="middle"
+                font-family="Georgia, serif" font-size="26" font-weight="900"
+                letter-spacing="4" fill="#ffd700" stroke="#000" stroke-width="1.5"
+                paint-order="stroke" filter="url(#glow2)">TORTI-HAMBURGUESA</text>
+        </svg>
+      </div>
+
+      <!-- Leyenda Personal / Combo -->
+      <p style="text-align:center; font-family:'Cinzel',serif; font-size:0.75rem; letter-spacing:3px; color:#93aad4; margin-bottom:var(--spacing-lg);">
+        PERSONAL &nbsp;|&nbsp; COMBO
+      </p>
+
+      <div class="cards-grid">
+
+        <article class="card has-char char-bottom card-porkyburguer">
+          <div class="card-top-line" aria-hidden="true"></div>
+          <h3 class="card-name">★ La Porkyburguer</h3>
+          <p class="card-desc" style="padding-right:80px;">Carne de res 100% artesanal, Tortilla bimbo, Queso fundido, Jamón ahumado, Vegetales frescos y Salsas de la casa.</p>
+          <div class="card-prices">
+            <div class="price-badge"><span class="price-label">Personal</span><span class="price-value">$12.600</span></div>
+            <div class="price-badge"><span class="price-label">Combo</span><span class="price-value">$19.100</span></div>
+          </div>
+          <img src="assets/svg/chars/chungus.svg" alt="" class="card-char" aria-hidden="true" style="top:auto; bottom:0; right:6px; width:90px;"/>
+        </article>
+
+        <article class="card has-char char-bottom">
+          <div class="card-top-line" aria-hidden="true"></div>
+          <h3 class="card-name">★ Taz-Explosiva</h3>
+          <p class="card-desc">Carne de res 100% artesanal, Tortilla bimbo, Queso fundido, Jamón ahumado, Tachieta ahumada, Champiñones, Vegetales frescos y Salsas de la casa.</p>
+          <div class="card-prices">
+            <div class="price-badge"><span class="price-label">Personal</span><span class="price-value">$16.900</span></div>
+            <div class="price-badge"><span class="price-label">Combo</span><span class="price-value">$23.400</span></div>
+          </div>
+          <img src="assets/svg/chars/taz.svg" alt="" class="card-char" aria-hidden="true" style="top:auto; bottom:0; right:6px; width:85px;"/>
+        </article>
+
+        <article class="card has-char card-pato-chiflado" style="min-height: 220px;">
+          <div class="card-top-line" aria-hidden="true"></div>
+          <h3 class="card-name">★ Pato Chiflado</h3>
+          <p class="card-desc">Carne de res 100% artesanal, Tortilla bimbo, Queso fundido, Jamón ahumado, Mutz Temiro, Huevos revueltos, Vegetales frescos y Salsas de la casa.</p>
+          <div class="card-prices">
+            <div class="price-badge"><span class="price-label">Personal</span><span class="price-value">$15.000</span></div>
+            <div class="price-badge"><span class="price-label">Combo</span><span class="price-value">$21.500</span></div>
+          </div>
+          <img src="assets/svg/chars/daffy.svg" alt="" class="card-char" aria-hidden="true" style="width:82px; top:-45px; right:0px;"/>
+        </article>
+
+        <article class="card has-char">
+          <div class="card-top-line" aria-hidden="true"></div>
+          <h3 class="card-name">★ La Correcaminos</h3>
+          <p class="card-desc">Doble carne de res 100% artesanal, Tortilla bimbo, Doble queso fundido, Jamón ahumado, Tocineta ahumada, Vegetales frescos y Salsas de la casa.</p>
+          <div class="card-prices">
+            <div class="price-badge"><span class="price-label">Personal</span><span class="price-value">$21.000</span></div>
+            <div class="price-badge"><span class="price-label">Combo</span><span class="price-value">$27.500</span></div>
+          </div>
+          <img src="assets/svg/chars/roadrunner2.svg" alt="" class="card-char" aria-hidden="true" style="width:160px; top:-30px; right:0px;"/>
+        </article>
+
+        <article class="card has-char">
+          <div class="card-top-line" aria-hidden="true"></div>
+          <h3 class="card-name">★ Conejo Cruch</h3>
+          <p class="card-desc">Pollo apanado 100% crocante, Tortilla bimbo, Queso fundido, Jamón ahumado, Carne desmechada, Vegetales frescos y Salsas de la casa.</p>
+          <div class="card-prices">
+            <div class="price-badge"><span class="price-label">Personal</span><span class="price-value">$16.000</span></div>
+            <div class="price-badge"><span class="price-label">Combo</span><span class="price-value">$22.500</span></div>
+          </div>
+          <img src="assets/svg/chars/bugs-running.svg" alt="" class="card-char" aria-hidden="true" style="width:90px; top:-45px; right:0px;"/>
+        </article>
+
+        <article class="card has-char">
+          <div class="card-top-line" aria-hidden="true"></div>
+          <h3 class="card-name">★ Taz's Tornado</h3>
+          <p class="card-desc">Carne de res 100% artesanal, Pollo apanado 100% crocante, Tortilla bimbo, Doble queso fundido, Doble jamón ahumado, Carne desmechada, Vegetales frescos y Salsas de la casa.</p>
+          <div class="card-prices">
+            <div class="price-badge"><span class="price-label">Personal</span><span class="price-value">$22.000</span></div>
+            <div class="price-badge"><span class="price-label">Combo</span><span class="price-value">$28.500</span></div>
+          </div>
+          <img src="assets/svg/chars/taz.svg" alt="" class="card-char" aria-hidden="true" style="width:78px; top:-45px; right:2px;"/>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ─── TORTI-PERRÍSIMO ─── -->
+    <section class="category" id="perrisimo" aria-labelledby="title-perrisimo">
+      <div class="divider" aria-hidden="true">
+        <svg viewBox="0 0 400 30" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="divGrad3" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#d81b8c;stop-opacity:0"/>
+              <stop offset="15%" style="stop-color:#d81b8c"/>
+              <stop offset="50%" style="stop-color:#ffd700"/>
+              <stop offset="85%" style="stop-color:#d81b8c"/>
+              <stop offset="100%" style="stop-color:#d81b8c;stop-opacity:0"/>
+            </linearGradient>
+          </defs>
+          <rect x="0" y="13" width="400" height="2" fill="url(#divGrad2)" rx="1"/>
+          <text x="196" y="22" font-size="16" fill="#ffd700" text-anchor="middle">★</text>
+          <text x="170" y="20" font-size="10" fill="#ffd700" opacity="0.6" text-anchor="middle">✦</text>
+          <text x="222" y="20" font-size="10" fill="#ffd700" opacity="0.6" text-anchor="middle">✦</text>
+        </svg>
+      </div>
+
+      <div class="cat-title-wrap">
+        <svg viewBox="0 0 560 80" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-perrisimo">
+          <title id="title-perrisimo">Torti-Perrísimo</title>
+          <defs>
+            <linearGradient id="titleBg3" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#111;stop-opacity:0"/>
+              <stop offset="20%" style="stop-color:#111"/>
+              <stop offset="80%" style="stop-color:#111"/>
+              <stop offset="100%" style="stop-color:#111;stop-opacity:0"/>
+            </linearGradient>
+            <linearGradient id="goldLine3" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#b8860b;stop-opacity:0"/>
+              <stop offset="20%" style="stop-color:#ffd700"/>
+              <stop offset="80%" style="stop-color:#ffd700"/>
+              <stop offset="100%" style="stop-color:#b8860b;stop-opacity:0"/>
+            </linearGradient>
+            <filter id="glow3">
+              <feGaussianBlur stdDeviation="2" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+          <rect x="0" y="8" width="560" height="56" fill="url(#titleBg3)" rx="8"/>
+          <rect x="0" y="8" width="560" height="2.5" fill="url(#goldLine3)"/>
+          <rect x="0" y="61" width="560" height="2.5" fill="url(#goldLine3)"/>
+          <text x="280" y="48" text-anchor="middle"
+                font-family="Georgia, serif" font-size="28" font-weight="900"
+                letter-spacing="4" fill="#ffd700" stroke="#000" stroke-width="1.5"
+                paint-order="stroke" filter="url(#glow3)">TORTI-PERRÍSIMO</text>
+        </svg>
+      </div>
+
+      <p style="text-align:center; font-family:'Cinzel',serif; font-size:0.75rem; letter-spacing:3px; color:#93aad4; margin-bottom:var(--spacing-lg);">
+        PERSONAL &nbsp;|&nbsp; COMBO
+      </p>
+
+      <div class="cards-grid">
+
+        <article class="card has-char char-bottom">
+          <div class="card-top-line" aria-hidden="true"></div>
+          <h3 class="card-name">★ Lindo Gatito</h3>
+          <p class="card-desc">Salchicha americana Zenú, Tortilla bimbo, Queso fundido, Jamón ahumado, Huevos de codorniz, Papas chips y Salsas de la casa.</p>
+          <div class="card-prices">
+            <div class="price-badge"><span class="price-label">Personal</span><span class="price-value">$12.200</span></div>
+            <div class="price-badge"><span class="price-label">Combo</span><span class="price-value">$18.700</span></div>
+          </div>
+          <img src="assets/svg/chars/sylvester.svg" alt="" class="card-char" aria-hidden="true" style="top:auto; bottom:0; right:6px; width:95px;"/>
+        </article>
+
+        <article class="card has-char char-bottom">
+          <div class="card-top-line" aria-hidden="true"></div>
+          <h3 class="card-name">★ El Martillazo de Marvin</h3>
+          <p class="card-desc">Salchicha americana Zenú, Tortilla bimbo, Doble queso fundido, Jamón ahumado, Maíz tiernito, Tocineta ahumada, Huevos de codorniz, Papas chips y Salsas de la casa.</p>
+          <div class="card-prices">
+            <div class="price-badge"><span class="price-label">Personal</span><span class="price-value">$16.200</span></div>
+            <div class="price-badge"><span class="price-label">Combo</span><span class="price-value">$22.700</span></div>
+          </div>
+          <img src="assets/svg/chars/marvin.svg" alt="" class="card-char" aria-hidden="true" style="top:auto; bottom:0; right:6px; width:90px;"/>
+        </article>
+
+        <article class="card has-char char-bottom">
+          <div class="card-top-line" aria-hidden="true"></div>
+          <h3 class="card-name">★ Pío Pío Extreme</h3>
+          <p class="card-desc">Chorizo mexicano, Tortilla bimbo, Doble queso fundido, Jamón ahumado, Champiñones frescos, Trocitos de piña, Huevos de codorniz, Papas chips y Salsas de la casa.</p>
+          <div class="card-prices">
+            <div class="price-badge"><span class="price-label">Personal</span><span class="price-value">$16.300</span></div>
+            <div class="price-badge"><span class="price-label">Combo</span><span class="price-value">$22.800</span></div>
+          </div>
+          <img src="assets/svg/chars/tweety.svg" alt="" class="card-char" aria-hidden="true" style="top:auto; bottom:0; right:6px; width:90px;"/>
+        </article>
+
+        <article class="card has-char char-bottom">
+          <div class="card-top-line" aria-hidden="true"></div>
+          <h3 class="card-name">★ Criollo — ¡Digo! ¡Digo!…</h3>
+          <p class="card-desc">Salchicha americana Zenú, Tortilla bimbo, Doble queso fundido, Jamón ahumado, Maíz tiernito, Huevos revueltos, Huevos de codorniz, Papas chips y Salsas de la casa.</p>
+          <div class="card-prices">
+            <div class="price-badge"><span class="price-label">Personal</span><span class="price-value">$15.400</span></div>
+            <div class="price-badge"><span class="price-label">Combo</span><span class="price-value">$21.900</span></div>
+          </div>
+          <img src="assets/svg/chars/foghorn.svg" alt="" class="card-char" aria-hidden="true" style="top:auto; bottom:0; right:6px; width:100px;"/>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ─── MAZORCADAS ─── -->
+    <section class="category" id="mazorcadas" aria-labelledby="title-mazorcadas">
+      <div class="divider" aria-hidden="true">
+        <svg viewBox="0 0 400 30" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="divGrad4" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#d81b8c;stop-opacity:0"/>
+              <stop offset="15%" style="stop-color:#d81b8c"/>
+              <stop offset="50%" style="stop-color:#ffd700"/>
+              <stop offset="85%" style="stop-color:#d81b8c"/>
+              <stop offset="100%" style="stop-color:#d81b8c;stop-opacity:0"/>
+            </linearGradient>
+          </defs>
+          <rect x="0" y="13" width="400" height="2" fill="url(#divGrad4)" rx="1"/>
+          <text x="196" y="22" font-size="16" fill="#ffd700" text-anchor="middle">★</text>
+          <text x="170" y="20" font-size="10" fill="#ffd700" opacity="0.6" text-anchor="middle">✦</text>
+          <text x="222" y="20" font-size="10" fill="#ffd700" opacity="0.6" text-anchor="middle">✦</text>
+        </svg>
+      </div>
+
+      <div class="cat-title-wrap">
+        <svg viewBox="0 0 560 80" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-mazorcadas">
+          <title id="title-mazorcadas">Mazorcadas</title>
+          <defs>
+            <linearGradient id="titleBg4" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#111;stop-opacity:0"/>
+              <stop offset="20%" style="stop-color:#111"/>
+              <stop offset="80%" style="stop-color:#111"/>
+              <stop offset="100%" style="stop-color:#111;stop-opacity:0"/>
+            </linearGradient>
+            <linearGradient id="goldLine4" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#b8860b;stop-opacity:0"/>
+              <stop offset="20%" style="stop-color:#ffd700"/>
+              <stop offset="80%" style="stop-color:#ffd700"/>
+              <stop offset="100%" style="stop-color:#b8860b;stop-opacity:0"/>
+            </linearGradient>
+            <filter id="glow4">
+              <feGaussianBlur stdDeviation="2" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+          <rect x="0" y="8" width="560" height="56" fill="url(#titleBg4)" rx="8"/>
+          <rect x="0" y="8" width="560" height="2.5" fill="url(#goldLine4)"/>
+          <rect x="0" y="61" width="560" height="2.5" fill="url(#goldLine4)"/>
+          <text x="280" y="48" text-anchor="middle"
+                font-family="Georgia, serif" font-size="30" font-weight="900"
+                letter-spacing="6" fill="#ffd700" stroke="#000" stroke-width="1.5"
+                paint-order="stroke" filter="url(#glow4)">MAZORCADAS</text>
+        </svg>
+      </div>
+
+      <p style="text-align:center; font-family:'Cinzel',serif; font-size:0.75rem; letter-spacing:3px; color:#93aad4; margin-bottom:var(--spacing-lg);">
+        PERSONAL &nbsp;|&nbsp; COMBO
+      </p>
+
+      <div class="cards-grid" id="mazorcadas-grid">
+
+        <article class="card has-char char-bottom">
+          <div class="card-top-line" aria-hidden="true"></div>
+          <h3 class="card-name">★ La Correcaminos</h3>
+          <p class="card-desc">Maíz tiernito, Carne o pollo, Queso fundido, Huevos de codorniz, Papas chips y Salsas de la casa.</p>
+          <div class="card-prices">
+            <div class="price-badge"><span class="price-label">Personal</span><span class="price-value">$12.300</span></div>
+            <div class="price-badge"><span class="price-label">Combo</span><span class="price-value">$18.800</span></div>
+          </div>
+          <img src="assets/svg/chars/roadrunner.svg" alt="" class="card-char" aria-hidden="true" style="top:auto; bottom:0; right:4px; width:90px;"/>
+        </article>
+
+        <article class="card has-char char-bottom">
+          <div class="card-top-line" aria-hidden="true"></div>
+          <h3 class="card-name">★ El Botín de San Bigotes</h3>
+          <p class="card-desc">Maíz tiernito, Carne, Pollo, Queso fundido, Tocineta ahumada, Champiñones frescos, Huevos de codorniz, Papas chips y Salsas de la casa.</p>
+          <div class="card-prices">
+            <div class="price-badge"><span class="price-label">Personal</span><span class="price-value">$18.000</span></div>
+            <div class="price-badge"><span class="price-label">Combo</span><span class="price-value">$24.500</span></div>
+          </div>
+          <img src="assets/svg/chars/sylvester2.svg" alt="" class="card-char" aria-hidden="true" style="top:auto; bottom:0; right:6px; width:65px;"/>
+        </article>
+
+        <article class="card has-char char-bottom">
+          <div class="card-top-line" aria-hidden="true"></div>
+          <h3 class="card-name">★ El Torbellino de Taz's</h3>
+          <p class="card-desc">Maíz tiernito, Carne, Pollo, Doble queso fundido, Chorizo mexicano, Tocineta ahumada, Champiñones frescos, Huevos de codorniz, Papas chips y Salsas de la casa.</p>
+          <div class="card-prices">
+            <div class="price-badge"><span class="price-label">Personal</span><span class="price-value">$23.000</span></div>
+            <div class="price-badge"><span class="price-label">Combo</span><span class="price-value">$29.500</span></div>
+          </div>
+          <img src="assets/svg/chars/taz.svg" alt="" class="card-char" aria-hidden="true" style="top:auto; bottom:0; right:6px; width:100px;"/>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ─── BONY PINCHOS ─── -->
+    <section class="category" id="pinchos" aria-labelledby="title-pinchos">
+      <div class="divider" aria-hidden="true">
+        <svg viewBox="0 0 400 30" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="divGrad5" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#d81b8c;stop-opacity:0"/>
+              <stop offset="15%" style="stop-color:#d81b8c"/>
+              <stop offset="50%" style="stop-color:#ffd700"/>
+              <stop offset="85%" style="stop-color:#d81b8c"/>
+              <stop offset="100%" style="stop-color:#d81b8c;stop-opacity:0"/>
+            </linearGradient>
+          </defs>
+          <rect x="0" y="13" width="400" height="2" fill="url(#divGrad5)" rx="1"/>
+          <text x="196" y="22" font-size="16" fill="#ffd700" text-anchor="middle">★</text>
+          <text x="170" y="20" font-size="10" fill="#ffd700" opacity="0.6" text-anchor="middle">✦</text>
+          <text x="222" y="20" font-size="10" fill="#ffd700" opacity="0.6" text-anchor="middle">✦</text>
+        </svg>
+      </div>
+
+      <div class="cat-title-wrap">
+        <svg viewBox="0 0 560 80" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-pinchos">
+          <title id="title-pinchos">Bony Pinchos</title>
+          <defs>
+            <linearGradient id="titleBg5" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#111;stop-opacity:0"/>
+              <stop offset="20%" style="stop-color:#111"/>
+              <stop offset="80%" style="stop-color:#111"/>
+              <stop offset="100%" style="stop-color:#111;stop-opacity:0"/>
+            </linearGradient>
+            <linearGradient id="goldLine5" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#b8860b;stop-opacity:0"/>
+              <stop offset="20%" style="stop-color:#ffd700"/>
+              <stop offset="80%" style="stop-color:#ffd700"/>
+              <stop offset="100%" style="stop-color:#b8860b;stop-opacity:0"/>
+            </linearGradient>
+            <filter id="glow5">
+              <feGaussianBlur stdDeviation="2" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+          <rect x="0" y="8" width="560" height="56" fill="url(#titleBg5)" rx="8"/>
+          <rect x="0" y="8" width="560" height="2.5" fill="url(#goldLine5)"/>
+          <rect x="0" y="61" width="560" height="2.5" fill="url(#goldLine5)"/>
+          <text x="280" y="48" text-anchor="middle"
+                font-family="Georgia, serif" font-size="30" font-weight="900"
+                letter-spacing="5" fill="#ffd700" stroke="#000" stroke-width="1.5"
+                paint-order="stroke" filter="url(#glow5)">BONY PINCHOS</text>
+        </svg>
+      </div>
+
+      <!-- Card especial centrada para Bony Pinchos -->
+      <div style="display:flex; justify-content:center;">
+
+        <article class="card has-char" style="max-width:400px; width:100%; text-align:center;">
+          <div class="card-top-line" aria-hidden="true"></div>
+          <!-- Pinchos SVG ilustración -->
+          <div style="margin: 0 auto var(--spacing-md); width:80px; height:80px;" aria-hidden="true">
+            <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+              <!-- Palo del pincho -->
+              <line x1="12" y1="70" x2="68" y2="14" stroke="#b8860b" stroke-width="3" stroke-linecap="round"/>
+              <!-- Trozos de pollo/carne -->
+              <rect x="28" y="28" width="18" height="18" rx="5" fill="#e07b39" stroke="#b8860b" stroke-width="1.5" transform="rotate(-45 37 37)"/>
+              <rect x="44" y="14" width="16" height="16" rx="4" fill="#c0392b" stroke="#b8860b" stroke-width="1.5" transform="rotate(-45 52 22)"/>
+              <rect x="14" y="42" width="16" height="16" rx="4" fill="#e07b39" stroke="#b8860b" stroke-width="1.5" transform="rotate(-45 22 50)"/>
+              <!-- Destellos -->
+              <circle cx="60" cy="18" r="3" fill="#ffd700" opacity="0.7"/>
+              <circle cx="20" cy="60" r="2.5" fill="#ffd700" opacity="0.5"/>
+            </svg>
+          </div>
+          <h3 class="card-name" style="font-size:1.3rem;">★ Bony Pinchos</h3>
+          <p class="card-desc" style="color:var(--text); margin-bottom:var(--spacing-sm);">
+            Pinchos de pechuga caramelizados con salsas de la casa y chorizos de cerdo para una combinación perfecta de sabores.
+          </p>
+          <p style="font-family:'Cinzel',serif; font-size:0.78rem; letter-spacing:2px; color:var(--text-muted); margin-bottom:var(--spacing-sm);">
+            ¡Eso! ¡eso eso todo amigos! 😊
+          </p>
+          <p class="price-single" style="font-size:1.5rem;">$8.000</p>
+          <img src="assets/svg/chars/speedy.svg" alt="" class="card-char" aria-hidden="true" style="width:160px; top:-75px; right:0px;"/>
+        </article>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ══════════ CTA BANNER ══════════ -->
+  <section class="cta-banner" aria-label="Hacer pedido">
+    <p class="cta-question">¿Ya sabes qué vas a pedir?</p>
+    <a class="cta-btn" href="https://wa.me/573142173883" target="_blank" rel="noopener noreferrer">
+      <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+      </svg>
+      Escríbenos por WhatsApp
+    </a>
+  </section>
+
+  <!-- ══════════ FOOTER ══════════ -->
+  <footer>
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:var(--spacing-md); max-width:1100px; margin:0 auto;">
+      <div>
+        <p class="footer-brand">Comidas Rápidas Mundo Tunes</p>
+        <p class="footer-sub">El sabor de tu caricatura favorita</p>
+      </div>
+      <p class="footer-sub">Buena comida &nbsp;•&nbsp; Buenos momentos &nbsp;•&nbsp; Siempre Tunes ♥</p>
+    </div>
+  </footer>
+
+  <!-- ══════════ BOTÓN WHATSAPP FLOTANTE ══════════ -->
+  <a class="wa-fab" href="https://wa.me/573142173883" target="_blank" rel="noopener noreferrer"
+     aria-label="Hacer pedido por WhatsApp">
+    <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+  </a>
+
+  <script>
+    // Animación flip al hacer scroll — IntersectionObserver
+    const flipTargets = document.querySelectorAll('.card, .category-title-wrap, .cta-banner');
+
+    // Estado inicial: invisible y rotado
+    flipTargets.forEach((el, i) => {
+      el.style.opacity = '0';
+      el.style.transform = 'perspective(600px) rotateY(90deg)';
+      el.style.transition = `opacity 0.5s ease ${i % 4 * 0.08}s, transform 0.5s cubic-bezier(0.34,1.56,0.64,1) ${i % 4 * 0.08}s`;
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'perspective(600px) rotateY(0deg)';
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    flipTargets.forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>

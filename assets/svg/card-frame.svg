@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 220" width="340" height="220">
+  <defs>
+    <linearGradient id="cardBg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a1a"/>
+      <stop offset="100%" style="stop-color:#0d0d0d"/>
+    </linearGradient>
+    <linearGradient id="goldBorder" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffd700"/>
+      <stop offset="40%" style="stop-color:#fff8a0"/>
+      <stop offset="100%" style="stop-color:#b8860b"/>
+    </linearGradient>
+    <filter id="cardShadow">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Sombra y fondo de la card -->
+  <rect x="6" y="6" width="328" height="208" rx="22" ry="22"
+        fill="#000" opacity="0.4"/>
+  <rect x="2" y="2" width="336" height="216" rx="24" ry="24"
+        fill="url(#goldBorder)"/>
+  <rect x="6" y="6" width="328" height="208" rx="20" ry="20"
+        fill="url(#cardBg)"/>
+  <!-- Borde interno negro -->
+  <rect x="10" y="10" width="320" height="200" rx="17" ry="17"
+        fill="none" stroke="#333" stroke-width="1"/>
+
+  <!-- Ornamento superior central (tipo corona/pico) -->
+  <path d="M150,6 Q170,-8 190,6" fill="none" stroke="url(#goldBorder)" stroke-width="3"/>
+  <!-- Ornamento inferior central -->
+  <path d="M150,214 Q170,228 190,214" fill="none" stroke="url(#goldBorder)" stroke-width="3"/>
+
+  <!-- Puntos de esquina decorativos -->
+  <circle cx="22" cy="22" r="5" fill="#ffd700" opacity="0.7"/>
+  <circle cx="318" cy="22" r="5" fill="#ffd700" opacity="0.7"/>
+  <circle cx="22" cy="198" r="5" fill="#ffd700" opacity="0.7"/>
+  <circle cx="318" cy="198" r="5" fill="#ffd700" opacity="0.7"/>
+</svg>

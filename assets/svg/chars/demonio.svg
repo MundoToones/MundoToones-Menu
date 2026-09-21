@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130 150" width="130" height="150">
+  <!-- Demonio peludo pequeño estilo cartoon (original) -->
+  <!-- Sombra base -->
+  <ellipse cx="65" cy="144" rx="38" ry="6" fill="#000" opacity="0.2"/>
+  <!-- Cuerpo peludo — capas de pelo irregular -->
+  <path d="M30,140 Q20,120 22,100 Q18,80 28,65 Q22,55 30,48 Q38,35 50,38 Q55,28 65,26 Q75,28 80,38 Q92,35 100,48 Q108,55 102,65 Q112,80 108,100 Q110,120 100,140Z"
+        fill="#8B4513" stroke="#222" stroke-width="2"/>
+  <!-- Textura de pelo (spikes) -->
+  <path d="M30,140 Q25,128 28,118 Q22,110 26,100 Q20,90 25,80 Q18,70 25,62"
+        fill="none" stroke="#5D2E0C" stroke-width="3" stroke-linecap="round"/>
+  <path d="M100,140 Q105,128 102,118 Q108,110 104,100 Q110,90 105,80 Q112,70 105,62"
+        fill="none" stroke="#5D2E0C" stroke-width="3" stroke-linecap="round"/>
+  <!-- Panza más clara -->
+  <ellipse cx="65" cy="105" rx="22" ry="28" fill="#c47a3a"/>
+  <!-- Cabeza -->
+  <ellipse cx="65" cy="58" rx="32" ry="30" fill="#8B4513" stroke="#222" stroke-width="2.5"/>
+  <!-- Picos de pelo en cabeza -->
+  <path d="M38,44 Q34,30 42,28 Q40,40 48,38" fill="#8B4513" stroke="#222" stroke-width="2"/>
+  <path d="M58,30 Q56,16 65,14 Q74,16 72,30" fill="#8B4513" stroke="#222" stroke-width="2"/>
+  <path d="M92,44 Q96,30 88,28 Q90,40 82,38" fill="#8B4513" stroke="#222" stroke-width="2"/>
+  <!-- Orejas tipo cuernitos -->
+  <path d="M40,42 Q32,26 42,22 Q50,28 46,42Z" fill="#8B4513" stroke="#222" stroke-width="2"/>
+  <path d="M90,42 Q98,26 88,22 Q80,28 84,42Z" fill="#8B4513" stroke="#222" stroke-width="2"/>
+  <!-- Ojos grandes salvajes -->
+  <ellipse cx="52" cy="54" rx="11" ry="12" fill="white" stroke="#222" stroke-width="2.5"/>
+  <ellipse cx="78" cy="54" rx="11" ry="12" fill="white" stroke="#222" stroke-width="2.5"/>
+  <circle cx="54" cy="56" r="7" fill="#e63946"/>
+  <circle cx="80" cy="56" r="7" fill="#e63946"/>
+  <circle cx="55" cy="54" r="4" fill="#111"/>
+  <circle cx="81" cy="54" r="4" fill="#111"/>
+  <circle cx="57" cy="52" r="1.5" fill="white"/>
+  <circle cx="83" cy="52" r="1.5" fill="white"/>
+  <!-- Nariz grande -->
+  <ellipse cx="65" cy="66" rx="8" ry="5" fill="#5D2E0C" stroke="#222" stroke-width="1.5"/>
+  <!-- Boca enorme abierta -->
+  <path d="M42,72 Q50,60 65,58 Q80,60 88,72 Q80,90 65,92 Q50,90 42,72Z"
+        fill="#c0392b" stroke="#222" stroke-width="2"/>
+  <!-- Dientes irregulares -->
+  <polygon points="52,72 55,80 49,80" fill="white" stroke="#222" stroke-width="1"/>
+  <polygon points="60,70 63,80 57,80" fill="white" stroke="#222" stroke-width="1"/>
+  <polygon points="68,70 71,80 65,80" fill="white" stroke="#222" stroke-width="1"/>
+  <polygon points="76,72 79,80 73,80" fill="white" stroke="#222" stroke-width="1"/>
+  <!-- Lengua -->
+  <ellipse cx="65" cy="84" rx="12" ry="6" fill="#e07070"/>
+  <!-- Garras/manos -->
+  <path d="M28,110 Q16,106 14,114 Q16,120 22,118 Q18,124 20,130 Q26,128 26,122 Q24,130 28,134 Q32,130 30,124 Q32,130 36,130 Q38,122 34,118Z"
+        fill="#8B4513" stroke="#222" stroke-width="2"/>
+  <path d="M102,110 Q114,106 116,114 Q114,120 108,118 Q112,124 110,130 Q104,128 104,122 Q106,130 102,134 Q98,130 100,124 Q98,130 94,130 Q92,122 96,118Z"
+        fill="#8B4513" stroke="#222" stroke-width="2"/>
+  <!-- Pies grandes -->
+  <ellipse cx="48" cy="142" rx="18" ry="8" fill="#8B4513" stroke="#222" stroke-width="2"/>
+  <ellipse cx="82" cy="142" rx="18" ry="8" fill="#8B4513" stroke="#222" stroke-width="2"/>
+</svg>

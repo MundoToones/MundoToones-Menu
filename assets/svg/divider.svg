@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 30" width="400" height="30">
+  <defs>
+    <linearGradient id="divGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#e63946;stop-opacity:0"/>
+      <stop offset="15%" style="stop-color:#e63946;stop-opacity:1"/>
+      <stop offset="50%" style="stop-color:#ffd700;stop-opacity:1"/>
+      <stop offset="85%" style="stop-color:#e63946;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#e63946;stop-opacity:0"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="13" width="400" height="2" fill="url(#divGrad)" rx="1"/>
+  <!-- Estrella central -->
+  <text x="196" y="22" font-size="16" fill="#ffd700" text-anchor="middle">★</text>
+  <text x="170" y="20" font-size="10" fill="#ffd700" opacity="0.6" text-anchor="middle">✦</text>
+  <text x="222" y="20" font-size="10" fill="#ffd700" opacity="0.6" text-anchor="middle">✦</text>
+</svg>

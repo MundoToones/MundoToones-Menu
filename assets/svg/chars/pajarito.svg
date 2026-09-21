@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 140" width="100" height="140">
+  <!-- Pajarito amarillo estilo cartoon (original) -->
+  <!-- Sombra -->
+  <ellipse cx="50" cy="134" rx="28" ry="5" fill="#000" opacity="0.15"/>
+  <!-- Cuerpo redondo amarillo -->
+  <ellipse cx="50" cy="100" rx="26" ry="28" fill="#ffd700" stroke="#222" stroke-width="2.5"/>
+  <!-- Panza más clara -->
+  <ellipse cx="50" cy="106" rx="16" ry="18" fill="#fff5a0"/>
+  <!-- Ala izquierda -->
+  <path d="M24,92 Q10,85 12,100 Q14,112 28,110" fill="#f4a300" stroke="#222" stroke-width="2"/>
+  <!-- Ala derecha -->
+  <path d="M76,92 Q90,85 88,100 Q86,112 72,110" fill="#f4a300" stroke="#222" stroke-width="2"/>
+  <!-- Cabeza -->
+  <ellipse cx="50" cy="60" rx="24" ry="22" fill="#ffd700" stroke="#222" stroke-width="2.5"/>
+  <!-- Plumón de cabeza (copete) -->
+  <path d="M40,40 Q44,26 50,24 Q56,26 60,40" fill="#ffd700" stroke="#222" stroke-width="2"/>
+  <path d="M44,38 Q46,28 50,26 Q54,28 56,38" fill="#ffd700" stroke="#222" stroke-width="2"/>
+  <!-- Ojos grandes inocentes -->
+  <ellipse cx="40" cy="56" rx="10" ry="11" fill="white" stroke="#222" stroke-width="2"/>
+  <ellipse cx="60" cy="56" rx="10" ry="11" fill="white" stroke="#222" stroke-width="2"/>
+  <!-- Pestañas -->
+  <line x1="33" y1="48" x2="37" y2="50" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+  <line x1="36" y1="46" x2="39" y2="49" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+  <line x1="63" y1="49" x2="67" y2="47" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+  <line x1="61" y1="46" x2="65" y2="45" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+  <!-- Pupilas -->
+  <circle cx="41" cy="58" r="6" fill="#111"/>
+  <circle cx="61" cy="58" r="6" fill="#111"/>
+  <circle cx="43" cy="56" r="2" fill="white"/>
+  <circle cx="63" cy="56" r="2" fill="white"/>
+  <!-- Pico naranja pequeño -->
+  <path d="M44,68 Q50,76 56,68 L53,72 L50,74 L47,72Z" fill="#f4890a" stroke="#222" stroke-width="1.5"/>
+  <!-- Pies naranjas -->
+  <path d="M38,126 L32,132 L38,130 L36,136 L42,130 L44,136 L46,128Z" fill="#f4890a" stroke="#222" stroke-width="1.5"/>
+  <path d="M62,126 L56,132 L62,130 L60,136 L66,130 L68,136 L70,128Z" fill="#f4890a" stroke="#222" stroke-width="1.5"/>
+</svg>
