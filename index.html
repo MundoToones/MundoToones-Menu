@@ -648,15 +648,39 @@
         padding-right: 110px !important;
       }
 
-      /* Porkyburguer: más espacio de texto en mobile */
+      /* Porkyburguer: centrado en eje Y, más grande */
       .card.card-porkyburguer {
         padding-right: 20px !important;
       }
-
       .card.card-porkyburguer .card-char {
-        width: 85px !important;
-        top: -40px !important;
-        transform: none !important;
+        width: 110px !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+      }
+
+      /* Taz-Explosiva: más grande */
+      .card.card-taz-explosiva .card-char {
+        width: 120px !important;
+      }
+
+      /* Pato Chiflado: más grande */
+      .card.card-pato-chiflado .card-char {
+        width: 115px !important;
+      }
+
+      /* La Correcaminos hamburguesa: más grande */
+      .card.card-correcaminos-hamb .card-char {
+        width: 130px !important;
+      }
+
+      /* Conejo Crunch: más grande */
+      .card.card-conejo-crunch .card-char {
+        width: 120px !important;
+      }
+
+      /* Taz's Tornado: más grande */
+      .card.card-taz-tornado-hamb .card-char {
+        width: 130px !important;
       }
     }
     .char-section-wrap {
@@ -692,6 +716,11 @@
       letter-spacing: 2px;
       color: var(--text-muted);
       text-transform: uppercase;
+    }
+
+    /* Touch en mobile — solo mueve el personaje */
+    .card.touch-active .card-char {
+      transform: translateY(calc(-50% - 14px)) scale(1.12) rotate(3deg) !important;
     }
 
     /* En móvil ocultar personajes secundarios para no saturar */
@@ -920,10 +949,10 @@
             <div class="price-badge"><span class="price-label">Personal</span><span class="price-value">$12.600</span></div>
             <div class="price-badge"><span class="price-label">Combo</span><span class="price-value">$19.100</span></div>
           </div>
-          <img src="assets/svg/chars/chungus.svg" alt="" class="card-char" aria-hidden="true" style="top:auto; bottom:0; right:6px; width:90px;"/>
+          <img src="assets/svg/chars/chungus.svg" alt="" class="card-char" aria-hidden="true" style="top:auto; bottom:0; right:6px; width:110px;"/>
         </article>
 
-        <article class="card has-char char-bottom">
+        <article class="card has-char char-bottom card-taz-explosiva">
           <div class="card-top-line" aria-hidden="true"></div>
           <h3 class="card-name">★ Taz-Explosiva</h3>
           <p class="card-desc">Carne de res 100% artesanal, Tortilla bimbo, Queso fundido, Jamón ahumado, Tachieta ahumada, Champiñones, Vegetales frescos y Salsas de la casa.</p>
@@ -931,7 +960,7 @@
             <div class="price-badge"><span class="price-label">Personal</span><span class="price-value">$16.900</span></div>
             <div class="price-badge"><span class="price-label">Combo</span><span class="price-value">$23.400</span></div>
           </div>
-          <img src="assets/svg/chars/taz.svg" alt="" class="card-char" aria-hidden="true" style="top:auto; bottom:0; right:6px; width:85px;"/>
+          <img src="assets/svg/chars/taz.svg" alt="" class="card-char" aria-hidden="true" style="top:auto; bottom:0; right:-10px; width:125px;"/>
         </article>
 
         <article class="card has-char card-pato-chiflado" style="min-height: 220px;">
@@ -945,7 +974,7 @@
           <img src="assets/svg/chars/daffy.svg" alt="" class="card-char" aria-hidden="true" style="width:82px; top:-45px; right:0px;"/>
         </article>
 
-        <article class="card has-char">
+        <article class="card has-char card-correcaminos-hamb">
           <div class="card-top-line" aria-hidden="true"></div>
           <h3 class="card-name">★ La Correcaminos</h3>
           <p class="card-desc">Doble carne de res 100% artesanal, Tortilla bimbo, Doble queso fundido, Jamón ahumado, Tocineta ahumada, Vegetales frescos y Salsas de la casa.</p>
@@ -953,12 +982,12 @@
             <div class="price-badge"><span class="price-label">Personal</span><span class="price-value">$21.000</span></div>
             <div class="price-badge"><span class="price-label">Combo</span><span class="price-value">$27.500</span></div>
           </div>
-          <img src="assets/svg/chars/roadrunner2.svg" alt="" class="card-char" aria-hidden="true" style="width:160px; top:-30px; right:0px;"/>
+          <img src="assets/svg/chars/roadrunner2.svg" alt="" class="card-char" aria-hidden="true" style="width:165px; top:-30px; right:0px;"/>
         </article>
 
-        <article class="card has-char">
+        <article class="card has-char card-conejo-crunch">
           <div class="card-top-line" aria-hidden="true"></div>
-          <h3 class="card-name">★ Conejo Cruch</h3>
+          <h3 class="card-name">★ Conejo Crunch</h3>
           <p class="card-desc">Pollo apanado 100% crocante, Tortilla bimbo, Queso fundido, Jamón ahumado, Carne desmechada, Vegetales frescos y Salsas de la casa.</p>
           <div class="card-prices">
             <div class="price-badge"><span class="price-label">Personal</span><span class="price-value">$16.000</span></div>
@@ -967,7 +996,7 @@
           <img src="assets/svg/chars/bugs-running.svg" alt="" class="card-char" aria-hidden="true" style="width:90px; top:-45px; right:0px;"/>
         </article>
 
-        <article class="card has-char">
+        <article class="card has-char card-taz-tornado-hamb">
           <div class="card-top-line" aria-hidden="true"></div>
           <h3 class="card-name">★ Taz's Tornado</h3>
           <p class="card-desc">Carne de res 100% artesanal, Pollo apanado 100% crocante, Tortilla bimbo, Doble queso fundido, Doble jamón ahumado, Carne desmechada, Vegetales frescos y Salsas de la casa.</p>
@@ -1161,7 +1190,7 @@
             <div class="price-badge"><span class="price-label">Personal</span><span class="price-value">$18.000</span></div>
             <div class="price-badge"><span class="price-label">Combo</span><span class="price-value">$24.500</span></div>
           </div>
-          <img src="assets/svg/chars/sylvester2.svg" alt="" class="card-char" aria-hidden="true" style="top:auto; bottom:0; right:6px; width:65px;"/>
+          <img src="assets/svg/chars/sylvester2.svg" alt="" class="card-char" aria-hidden="true" style="top:auto; bottom:0; right:6px; width:85px;"/>
         </article>
 
         <article class="card has-char char-bottom">
@@ -1316,6 +1345,17 @@
     }, { threshold: 0.1 });
 
     flipTargets.forEach(el => observer.observe(el));
+
+    // Efecto tap en mobile — toggle: queda activo hasta tocar otra card
+    document.querySelectorAll('.card').forEach(card => {
+      card.addEventListener('touchstart', () => {
+        const isActive = card.classList.contains('touch-active');
+        // Quitar activo de todas
+        document.querySelectorAll('.card.touch-active').forEach(c => c.classList.remove('touch-active'));
+        // Si no estaba activa, activarla
+        if (!isActive) card.classList.add('touch-active');
+      }, { passive: true });
+    });
   </script>
 
 </body>
