@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mundo Tunes — Menú Digital</title>
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@400;600;900&family=Lato:wght@400;700&display=swap" rel="stylesheet" />
@@ -1293,21 +1294,22 @@
   </a>
 
   <script>
-    // Animación flip al hacer scroll — IntersectionObserver
-    const flipTargets = document.querySelectorAll('.card, .category-title-wrap, .cta-banner');
+    // Animación Jack-in-the-box al hacer scroll — IntersectionObserver
+    const flipTargets = document.querySelectorAll('.card, .category-title-wrap');
 
-    // Estado inicial: invisible y rotado
+    // Estado inicial: invisible, encogido y rotado hacia abajo
     flipTargets.forEach((el, i) => {
       el.style.opacity = '0';
-      el.style.transform = 'perspective(600px) rotateY(90deg)';
-      el.style.transition = `opacity 0.5s ease ${i % 4 * 0.08}s, transform 0.5s cubic-bezier(0.34,1.56,0.64,1) ${i % 4 * 0.08}s`;
+      el.style.transform = 'translateY(60px) scale(0.5) rotate(-8deg)';
+      el.style.transformOrigin = 'bottom center';
+      el.style.transition = `opacity 0.15s ease ${i % 4 * 0.1}s, transform 0.6s cubic-bezier(0.34,1.7,0.64,1) ${i % 4 * 0.1}s`;
     });
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.style.opacity = '1';
-          entry.target.style.transform = 'perspective(600px) rotateY(0deg)';
+          entry.target.style.transform = 'translateY(0) scale(1) rotate(0deg)';
           observer.unobserve(entry.target);
         }
       });
