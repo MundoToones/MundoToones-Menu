@@ -19,15 +19,3 @@ Toones food/
 │       └── divider.svg         # Divisor entre secciones
 └── README.md
 ```
-
-## 🛠 Despliegue en GitHub Pages
-
-1. Sube este repositorio a GitHub
-2. Ve a **Settings → Pages**
-3. En _Source_, selecciona **Deploy from a branch**
-4. Selecciona la rama `main` y carpeta `/ (root)`
-5. Guarda — en unos minutos el menú estará en vivo
-
-## ✏️ Actualizar precios o productos
-
-Edita directamente el archivo `index.html`. Cada producto está en un `<article class="card">` dentro de su sección.
